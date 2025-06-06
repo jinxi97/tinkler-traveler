@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package ai.tinkler.traveler_001;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// -----------------------------------------------------------------------------
+// 🌍  Single user-generated event, suitable for ANY product or platform.
+// -----------------------------------------------------------------------------
+message UserActivity {
+  // -- Who / where ------------------------------------------------------------
+  string user_id        = 1;  // Stable internal user or device identifier
+  string session_id     = 2;  // Same value for every event in a session
+  string app_id         = 3;  // e.g. "travel-web", "erp-ios", "storefront"
+
+  // -- When -------------------------------------------------------------------
+  google.protobuf.Timestamp occurred_at = 4; // Client-side time preferred
+
+  // -- What -------------------------------------------------------------------
+  string event_name = 5;      // Free-form: "trip_created", "button_click",
+                              // "item_purchased", "search_executed" …
+
+  // Optional coarse grouping for quick roll-ups (e.g. BigQuery partitioning)
+  string category   = 6;      // e.g. "navigation", "commerce", "content"
+
+  // -- How / why --------------------------------------------------------------
+  // Key–value bag for anything that can live as a primitive JSON value.
+  // Keep values as *strings* unless you truly need Struct’s numeric/bool.
+  google.protobuf.Struct attributes = 7;
+}
